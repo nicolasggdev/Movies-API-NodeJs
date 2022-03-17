@@ -23,14 +23,20 @@ const Movie = database.define("movie", {
   },
   duration: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    defaultValue: 0
+  },
+  rating: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 1
   },
   img: {
     type: DataTypes.STRING(255),
     allowNull: false
   },
   genre: {
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING(50),
     allowNull: false
   },
   status: {

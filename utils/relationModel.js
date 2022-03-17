@@ -2,7 +2,7 @@
 const { User } = require("../model/user.model");
 const { Review } = require("../model/review.model");
 const { Movie } = require("../model/movie.model");
-const { actorsInMovie } = require("../model/actorsInMovie.model");
+const { ActorsInMovie } = require("../model/actorsInMovie.model");
 const { Actor } = require("../model/actor.model");
 
 exports.relationModel = () => {
@@ -15,10 +15,6 @@ exports.relationModel = () => {
   Review.belongsTo(Review);
 
   // M Movies -> M Actors
-  // Movie.hasMany(actorsInMovie);
-  // actorsInMovie.belongsToMany(Movie);
-
-  // M Actors -> M Movies
-  // Actor.hasMany(actorsInMovie);
-  // actorsInMovie.belongsToMany(Actor);
+  Movie.belongsToMany(Actor, { through: ActorsInMovie });
+  Actor.belongsToMany(Movie, { through: ActorsInMovie });
 };

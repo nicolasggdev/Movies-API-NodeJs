@@ -18,12 +18,13 @@ const Actor = database.define("actor", {
     allowNull: false
   },
   country: {
-    type: DataTypes.STRING(20),
+    type: DataTypes.STRING(100),
     allowNull: false
   },
   rating: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    defaultValue: 0
   },
   age: {
     type: DataTypes.INTEGER,

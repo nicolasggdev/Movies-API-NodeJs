@@ -27,8 +27,9 @@ const User = database.define("user", {
     allowNull: false
   },
   role: {
-    type: DataTypes.STRING(15),
-    allowNull: false
+    type: DataTypes.STRING(10),
+    allowNull: false,
+    defaultValue: "guest"
   },
   status: {
     type: DataTypes.STRING(10),

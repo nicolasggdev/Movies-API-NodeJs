@@ -6,7 +6,7 @@ const { DataTypes } = require("sequelize");
 
 // Create the model (Columns)
 
-const actorsInMovie = database.define("actorsInMovie", {
+const ActorsInMovie = database.define("actorsInMovie", {
   id: {
     primaryKey: true,
     autoIncrement: true,
@@ -23,4 +23,4 @@ const actorsInMovie = database.define("actorsInMovie", {
   }
 });
 
-module.exports = { actorsInMovie };
+module.exports = { ActorsInMovie };
