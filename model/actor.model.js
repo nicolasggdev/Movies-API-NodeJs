@@ -1,5 +1,5 @@
 // Import Database
-const { database } = require("../utils/database");
+const { database } = require("../database/database");
 
 // Import Datatypes
 const { DataTypes } = require("sequelize");

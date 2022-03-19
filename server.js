@@ -2,10 +2,10 @@
 const { app } = require("./app");
 
 // Import Database
-const { database } = require("./utils/database");
+const { database } = require("./database/database");
 
 // Import Relation Models
-const { relationModel } = require("./utils/relationModel");
+const { relationModel } = require("./database/relationModel");
 
 // Import dotenv
 const dotenv = require("dotenv");
