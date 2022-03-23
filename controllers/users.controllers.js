@@ -4,6 +4,9 @@ const { User } = require("../model/user.model");
 // Import Bcrypt
 const bcrypt = require("bcryptjs");
 
+// Import JWT
+const jwt = require("jsonwebtoken");
+
 // Import Middlewares
 const { catchAsync } = require("../middleware/catchAsync");
 const { AppError } = require("../middleware/appError");
@@ -119,5 +122,27 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 
   res.status(204).json({
     status: "success"
+  });
+});
+
+// Login the user
+exports.loginUser = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ where: { email, status: "active" } });
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!user || !isPasswordValid) {
+    return next(new AppError(400, "Credentials are invalid"));
+  }
+
+  const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN
+  });
+
+  res.status(200).json({
+    status: "success",
+    data: { token }
   });
 });

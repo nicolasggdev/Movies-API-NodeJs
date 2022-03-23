@@ -1,13 +1,17 @@
 // Import Express
 const express = require("express");
 
+// Import Middleware
+const { validateSession } = require("../middleware/auth.middleware");
+
 // Import Controllers
 const {
   getAllUsers,
   getUserById,
   createNewUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  loginUser
 } = require("../controllers/users.controllers");
 
 // Init Router
@@ -15,14 +19,20 @@ const router = express.Router();
 
 // Define the Endpoints
 
+// POST http://localhost:4000/api/v1/users
+router.post("/", createNewUser);
+
+// POST http://localhost:4000/api/v1/users/login
+router.post("/login", loginUser);
+
+// ValidateSession Middleware for the endpoints under here
+router.use(validateSession);
+
 // GET http://localhost:4000/api/v1/users
 router.get("/", getAllUsers);
 
 // GET BY ID http://localhost:4000/api/v1/users/:id
 router.get("/:id", getUserById);
-
-// POST http://localhost:4000/api/v1/users
-router.post("/", createNewUser);
 
 // PATCH http://localhost:4000/api/v1/users/:id
 router.patch("/:id", updateUser);

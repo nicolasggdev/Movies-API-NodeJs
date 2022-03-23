@@ -1,6 +1,9 @@
 // Import Express
 const express = require("express");
 
+// Import Middleware
+const { validateSession } = require("../middleware/auth.middleware");
+
 // Import Controllers
 const {
   getAllActors,
@@ -15,6 +18,9 @@ const { upload } = require("../utils/multer");
 
 // Init Router
 const router = express.Router();
+
+// ValidateSession Middleware for the endpoints under here
+router.use(validateSession);
 
 // Define the Endpoints
 
