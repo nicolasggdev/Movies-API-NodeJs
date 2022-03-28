@@ -1,5 +1,6 @@
 // Import Model
 const { User } = require("../model/user.model");
+const { Review } = require("../model/review.model");
 
 // Import Utils
 const { AppError } = require("../middleware/appError");
@@ -10,6 +11,7 @@ exports.userExist = catchAsync(async (req, res, next) => {
 
   const user = await User.findOne({
     where: { id, status: "active" },
+    include: [{ model: Review }],
     attributes: { exclude: ["password"] }
   });
 

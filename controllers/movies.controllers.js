@@ -1,6 +1,7 @@
 // Import Models
 const { Movie } = require("../model/movie.model");
 const { Actor } = require("../model/actor.model");
+const { Review } = require("../model/review.model");
 const { ActorsInMovie } = require("../model/actorsInMovie.model");
 
 // Import Firebase
@@ -25,7 +26,7 @@ const { filterObj } = require("../utils/filterObj");
 exports.getAllMovies = catchAsync(async (req, res, next) => {
   const movies = await Movie.findAll({
     where: { status: "active" },
-    include: [{ model: Actor }]
+    include: [{ model: Actor }, { model: Review }]
   });
 
   const moviesPromises = movies.map(
@@ -37,6 +38,8 @@ exports.getAllMovies = catchAsync(async (req, res, next) => {
       rating,
       img,
       genre,
+      actors,
+      reviews,
       status,
       createdAt,
       updatedAt
@@ -54,6 +57,8 @@ exports.getAllMovies = catchAsync(async (req, res, next) => {
         img: imgDownloadUrl,
         genre,
         status,
+        actors,
+        reviews,
         createdAt,
         updatedAt
       };

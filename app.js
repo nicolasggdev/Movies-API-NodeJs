@@ -8,6 +8,7 @@ const { globalErrorHandler } = require("./middleware/error.middleware");
 const { usersRouter } = require("./routes/users.routes");
 const { moviesRouter } = require("./routes/movies.routes");
 const { actorsRouter } = require("./routes/actors.routes");
+const { reviewsRouter } = require("./routes/reviews.routes");
 
 // Import Utils
 const { AppError } = require("./middleware/appError");
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/movies", moviesRouter);
 app.use("/api/v1/actors", actorsRouter);
+app.use("/api/v1/reviews", reviewsRouter);
 
 // Middleware for page that not found
 app.use("*", (req, res, next) => {
