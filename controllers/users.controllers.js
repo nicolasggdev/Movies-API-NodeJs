@@ -11,6 +11,9 @@ const jwt = require("jsonwebtoken");
 const { catchAsync } = require("../middleware/catchAsync");
 const { AppError } = require("../middleware/appError");
 
+// Import Express-Validator
+const { validationResult } = require("express-validator");
+
 // Import Utils
 const { filterObj } = require("../utils/filterObj");
 
@@ -33,16 +36,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
 
 // Get the user by Id
 exports.getUserById = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
-
-  const user = await User.findOne({
-    where: { status: "active", id },
-    attributes: { exclude: ["password"] }
-  });
-
-  if (!user) {
-    return next(new AppError(404, "Cant find the User with the given ID"));
-  }
+  const { user } = req;
 
   res.status(200).json({
     status: "success",
@@ -54,10 +48,16 @@ exports.getUserById = catchAsync(async (req, res, next) => {
 
 // Create a new user
 exports.createNewUser = catchAsync(async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
 
-  if (!username || !email || !password) {
-    return next(new AppError(400, "The properties are not valid"));
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const errorMsg = errors
+      .array()
+      .map((err) => err.msg)
+      .join(". ");
+    return next(new AppError(400, errorMsg));
   }
 
   const salt = await bcrypt.genSalt(12);
@@ -67,7 +67,8 @@ exports.createNewUser = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     username,
     email,
-    password: passwordCrypt
+    password: passwordCrypt,
+    role
   });
 
   newUser.password = undefined;
@@ -82,16 +83,7 @@ exports.createNewUser = catchAsync(async (req, res, next) => {
 
 // Update the data user
 exports.updateUser = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
-
-  const user = await User.findOne({
-    where: { status: "active", id },
-    attributes: { exclude: ["password"] }
-  });
-
-  if (!user) {
-    return next(new AppError(404, "Cant find the User with the given ID"));
-  }
+  const { user } = req;
 
   const data = filterObj(req.body, "username", "email");
 
@@ -107,16 +99,7 @@ exports.updateUser = catchAsync(async (req, res, next) => {
 
 // Delete the user
 exports.deleteUser = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
-
-  const user = await User.findOne({
-    where: { status: "active", id },
-    attributes: { exclude: ["password"] }
-  });
-
-  if (!user) {
-    return next(new AppError(404, "Cant find the User with the given ID"));
-  }
+  const { user } = req;
 
   await user.update({ status: "deleted" });
 
@@ -144,5 +127,12 @@ exports.loginUser = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: { token }
+  });
+});
+
+// Check the token
+exports.checkToken = catchAsync(async (req, res, next) => {
+  res.status(200).json({
+    status: "success"
   });
 });

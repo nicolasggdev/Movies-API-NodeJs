@@ -1,8 +1,16 @@
 // Import Express
 const express = require("express");
 
+// Import Express-Validator
+const { body } = require("express-validator");
+
 // Import Middleware
-const { validateSession } = require("../middleware/auth.middleware");
+const {
+  validateSession,
+  protectAdmin
+} = require("../middleware/auth.middleware");
+
+const { actorsExits } = require("../middleware/actors.middleware");
 
 // Import Controllers
 const {
@@ -19,24 +27,50 @@ const { upload } = require("../utils/multer");
 // Init Router
 const router = express.Router();
 
-// ValidateSession Middleware for the endpoints under here
 router.use(validateSession);
 
 // Define the Endpoints
 
-// GET http://localhost:4000/api/v1/actors
-router.get("/", getAllActors);
+router
+  .route("/")
+  .get(getAllActors)
+  .post(
+    upload.single("actorImg"),
+    [
+      body("name")
+        .isString()
+        .withMessage("Name must be a string")
+        .notEmpty()
+        .withMessage("Must provide a valid name"),
+      body("country")
+        .isString()
+        .withMessage("Country must be a string")
+        .notEmpty()
+        .withMessage("Must provide a valid country"),
+      body("rating")
+        .isNumeric()
+        .withMessage("Rating must be a number")
+        .custom((value) => value > 0 && value <= 5)
+        .withMessage("Rating must be between 1 to 5")
+        .notEmpty()
+        .withMessage("Must provide a valid rating"),
+      body("age")
+        .isNumeric()
+        .withMessage("Age must be a number")
+        .custom((value) => value > 0)
+        .withMessage("Age must be a greater than 0")
+        .notEmpty()
+        .withMessage("Must provide a valid age")
+    ],
+    protectAdmin,
+    createNewActor
+  );
 
-// GET BY ID http://localhost:4000/api/v1/actors/:id
-router.get("/:id", getActorById);
-
-// POST http://localhost:4000/api/v1/actors
-router.post("/", upload.single("actorImg"), createNewActor);
-
-// PATCH http://localhost:4000/api/v1/actors/:id
-router.patch("/:id", updateActor);
-
-// DELETE http://localhost:4000/api/v1/actors/:id
-router.delete("/:id", deleteActor);
+router
+  .use("/:id", actorsExits)
+  .route("/:id")
+  .get(getActorById)
+  .patch(protectAdmin, updateActor)
+  .delete(protectAdmin, deleteActor);
 
 module.exports = { actorsRouter: router };

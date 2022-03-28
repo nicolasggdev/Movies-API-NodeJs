@@ -1,8 +1,19 @@
 // Import Express
 const express = require("express");
 
+// Import Express-Validator
+const { body } = require("express-validator");
+
 // Import Middleware
-const { validateSession } = require("../middleware/auth.middleware");
+const {
+  validateSession,
+  protectAdmin
+} = require("../middleware/auth.middleware");
+
+const {
+  protectAccountOwner,
+  userExist
+} = require("../middleware/users.middleware");
 
 // Import Controllers
 const {
@@ -11,7 +22,8 @@ const {
   createNewUser,
   updateUser,
   deleteUser,
-  loginUser
+  loginUser,
+  checkToken
 } = require("../controllers/users.controllers");
 
 // Init Router
@@ -19,25 +31,46 @@ const router = express.Router();
 
 // Define the Endpoints
 
-// POST http://localhost:4000/api/v1/users
-router.post("/", createNewUser);
+router.post(
+  "/",
+  [
+    body("username")
+      .isString()
+      .withMessage("Username must be a string")
+      .notEmpty()
+      .withMessage("Must provide a valid username"),
+    body("email")
+      .isEmail()
+      .withMessage("Email must be a string")
+      .notEmpty()
+      .withMessage("Must provide a valid email"),
+    body("password")
+      .isString()
+      .withMessage("Password must be a string")
+      .notEmpty()
+      .withMessage("Must provide a valid password"),
+    body("role")
+      .isString()
+      .withMessage("Role must be a string")
+      .notEmpty()
+      .withMessage("Must provide a valid role")
+  ],
+  createNewUser
+);
 
-// POST http://localhost:4000/api/v1/users/login
 router.post("/login", loginUser);
 
-// ValidateSession Middleware for the endpoints under here
 router.use(validateSession);
 
-// GET http://localhost:4000/api/v1/users
-router.get("/", getAllUsers);
+router.get("/check-token", checkToken);
 
-// GET BY ID http://localhost:4000/api/v1/users/:id
-router.get("/:id", getUserById);
+router.get("/", protectAdmin, getAllUsers);
 
-// PATCH http://localhost:4000/api/v1/users/:id
-router.patch("/:id", updateUser);
-
-// DELETE http://localhost:4000/api/v1/users/:id
-router.delete("/:id", deleteUser);
+router
+  .use("/:id", userExist)
+  .route("/:id")
+  .get(getUserById)
+  .patch(protectAccountOwner, updateUser)
+  .delete(protectAccountOwner, deleteUser);
 
 module.exports = { usersRouter: router };
