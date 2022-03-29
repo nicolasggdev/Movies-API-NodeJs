@@ -1,6 +1,7 @@
 // Import Model
 const { User } = require("../model/user.model");
 const { Review } = require("../model/review.model");
+const { Movie } = require("../model/movie.model");
 
 // Import Bcrypt
 const bcrypt = require("bcryptjs");
@@ -24,7 +25,7 @@ const { filterObj } = require("../utils/filterObj");
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.findAll({
     where: { status: "active" },
-    include: [{ model: Review }],
+    include: [{ model: Review, include: [{ model: Movie }] }],
     attributes: { exclude: ["password"] }
   });
 

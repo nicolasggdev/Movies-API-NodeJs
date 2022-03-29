@@ -12,7 +12,7 @@ exports.relationModel = () => {
 
   // 1 Movie -> M Reviews
   Movie.hasMany(Review);
-  Review.belongsTo(Review);
+  Review.belongsTo(Movie);
 
   // M Movies -> M Actors
   Movie.belongsToMany(Actor, { through: ActorsInMovie });

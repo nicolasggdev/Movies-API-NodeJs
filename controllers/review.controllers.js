@@ -17,7 +17,8 @@ const { filterObj } = require("../utils/filterObj");
 // Get all the reviews
 exports.getAllReviews = catchAsync(async (req, res, next) => {
   const reviews = await Review.findAll({
-    where: { status: "active" }
+    where: { status: "active" },
+    include: [{ model: Movie }]
   });
 
   res.status(200).json({
