@@ -1,7 +1,5 @@
-// Import Model
 const { Review } = require("../model/review.model");
 
-// Import Utils
 const { AppError } = require("./appError");
 const { catchAsync } = require("./catchAsync");
 

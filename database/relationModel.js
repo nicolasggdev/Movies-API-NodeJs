@@ -1,4 +1,3 @@
-// Import models
 const { User } = require("../model/user.model");
 const { Review } = require("../model/review.model");
 const { Movie } = require("../model/movie.model");

@@ -1,18 +1,12 @@
-// Import Models
 const { Review } = require("../model/review.model");
 const { Movie } = require("../model/movie.model");
 
-// Import Middleware
 const { catchAsync } = require("../middleware/catchAsync");
 const { AppError } = require("../middleware/appError");
 
-// Import Express-Validator
 const { validationResult } = require("express-validator");
 
-// Import Utils
 const { filterObj } = require("../utils/filterObj");
-
-// Define the Controllers for movies
 
 // Get all the reviews
 exports.getAllReviews = catchAsync(async (req, res, next) => {
@@ -44,16 +38,6 @@ exports.getReviewById = catchAsync(async (req, res, next) => {
 // Create a new review
 exports.createNewReview = catchAsync(async (req, res, next) => {
   const { title, comments, rating, movieId } = req.body;
-
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    const errorMsg = errors
-      .array()
-      .map((err) => err.msg)
-      .join(". ");
-    return next(new AppError(400, errorMsg));
-  }
 
   const newReview = await Review.create({
     title,

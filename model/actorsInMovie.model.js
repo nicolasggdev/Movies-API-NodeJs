@@ -1,10 +1,6 @@
-// Import Database
 const { database } = require("../database/database");
 
-// Import Datatypes
 const { DataTypes } = require("sequelize");
-
-// Create the model (Columns)
 
 const ActorsInMovie = database.define("actorsInMovie", {
   id: {

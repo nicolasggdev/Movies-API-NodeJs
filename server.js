@@ -1,34 +1,25 @@
-// Import App
 const { app } = require("./app");
 
-// Import Database
 const { database } = require("./database/database");
 
-// Import Relation Models
 const { relationModel } = require("./database/relationModel");
 
-// Import dotenv
 const dotenv = require("dotenv");
 
-// Init dotenv
 dotenv.config({ path: "./config.env" });
 
-// Database Authenticated
 database
   .authenticate()
   .then(() => console.log("Database is authenticated"))
   .catch((err) => console.log(err));
 
-// Init Relations Models
 relationModel();
 
-// Databse Synced
 database
   .sync()
   .then(() => console.log("Database is synced"))
   .catch((err) => console.log(err));
 
-// Create a server on http://localhost:4000
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {

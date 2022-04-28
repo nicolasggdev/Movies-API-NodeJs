@@ -1,8 +1,6 @@
-// Import Model
 const { Actor } = require("../model/actor.model");
 const { Movie } = require("../model/movie.model");
 
-// Import Utils
 const { AppError } = require("./appError");
 const { catchAsync } = require("./catchAsync");
 

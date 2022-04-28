@@ -1,25 +1,17 @@
-// Import Model
 const { User } = require("../model/user.model");
 const { Review } = require("../model/review.model");
 const { Movie } = require("../model/movie.model");
 
-// Import Bcrypt
 const bcrypt = require("bcryptjs");
 
-// Import JWT
 const jwt = require("jsonwebtoken");
 
-// Import Middlewares
 const { catchAsync } = require("../middleware/catchAsync");
 const { AppError } = require("../middleware/appError");
 
-// Import Express-Validator
 const { validationResult } = require("express-validator");
 
-// Import Utils
 const { filterObj } = require("../utils/filterObj");
-
-// Define the Controllers for users
 
 // Get all the users
 exports.getAllUsers = catchAsync(async (req, res, next) => {
@@ -52,16 +44,6 @@ exports.getUserById = catchAsync(async (req, res, next) => {
 // Create a new user
 exports.createNewUser = catchAsync(async (req, res, next) => {
   const { username, email, password, role } = req.body;
-
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    const errorMsg = errors
-      .array()
-      .map((err) => err.msg)
-      .join(". ");
-    return next(new AppError(400, errorMsg));
-  }
 
   const salt = await bcrypt.genSalt(12);
 

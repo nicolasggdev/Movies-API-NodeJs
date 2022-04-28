@@ -1,20 +1,14 @@
-// Import JWT
 const jwt = require("jsonwebtoken");
 
-// Import dotenv
 const dotenv = require("dotenv");
 
-// Import promisify
 const { promisify } = require("util");
 
-// Models
 const { User } = require("../model/user.model");
 
-// Utils
 const { AppError } = require("../middleware/appError");
 const { catchAsync } = require("../middleware/catchAsync");
 
-// Init dotenv
 dotenv.config({ path: "./config.env" });
 
 exports.validateSession = catchAsync(async (req, res, next) => {

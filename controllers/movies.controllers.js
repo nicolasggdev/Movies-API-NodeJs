@@ -1,26 +1,18 @@
-// Import Models
 const { Movie } = require("../model/movie.model");
 const { Actor } = require("../model/actor.model");
 const { Review } = require("../model/review.model");
 const { ActorsInMovie } = require("../model/actorsInMovie.model");
 
-// Import Firebase
 const { storage } = require("../database/firebase");
 
-// Import firebase methods
 const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
 
-// Import Middleware
 const { catchAsync } = require("../middleware/catchAsync");
 const { AppError } = require("../middleware/appError");
 
-// Import Express-Validator
 const { validationResult } = require("express-validator");
 
-// Import Utils
 const { filterObj } = require("../utils/filterObj");
-
-// Define the Controllers for movies
 
 // Get all the movies
 exports.getAllMovies = catchAsync(async (req, res, next) => {
@@ -96,16 +88,6 @@ exports.getMovieById = catchAsync(async (req, res, next) => {
 // Create a new movie
 exports.createNewMovie = catchAsync(async (req, res, next) => {
   const { title, description, duration, rating, genre, actors } = req.body;
-
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    const errorMsg = errors
-      .array()
-      .map((err) => err.msg)
-      .join(". ");
-    return next(new AppError(400, errorMsg));
-  }
 
   const imgRef = ref(
     storage,

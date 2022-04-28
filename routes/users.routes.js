@@ -1,10 +1,5 @@
-// Import Express
 const express = require("express");
 
-// Import Express-Validator
-const { body } = require("express-validator");
-
-// Import Middleware
 const {
   validateSession,
   protectAdmin
@@ -15,7 +10,11 @@ const {
   userExist
 } = require("../middleware/users.middleware");
 
-// Import Controllers
+const {
+  createUserValidator,
+  validationResult
+} = require("../middleware/validators.middleware");
+
 const {
   getAllUsers,
   getUserById,
@@ -26,37 +25,9 @@ const {
   checkToken
 } = require("../controllers/users.controllers");
 
-// Init Router
 const router = express.Router();
 
-// Define the Endpoints
-
-router.post(
-  "/",
-  [
-    body("username")
-      .isString()
-      .withMessage("Username must be a string")
-      .notEmpty()
-      .withMessage("Must provide a valid username"),
-    body("email")
-      .isEmail()
-      .withMessage("Email must be a string")
-      .notEmpty()
-      .withMessage("Must provide a valid email"),
-    body("password")
-      .isString()
-      .withMessage("Password must be a string")
-      .notEmpty()
-      .withMessage("Must provide a valid password"),
-    body("role")
-      .isString()
-      .withMessage("Role must be a string")
-      .notEmpty()
-      .withMessage("Must provide a valid role")
-  ],
-  createNewUser
-);
+router.post("/", createUserValidator, validationResult, createNewUser);
 
 router.post("/login", loginUser);
 

@@ -1,7 +1,5 @@
-// Import Express
 const express = require("express");
 
-// Import Middleware
 const { validateSession } = require("../middleware/auth.middleware");
 
 const {
@@ -9,10 +7,11 @@ const {
   reviewExits
 } = require("../middleware/review.middleware");
 
-// Import Express-Validator
-const { body } = require("express-validator");
+const {
+  createReviewsValidator,
+  validationResult
+} = require("../middleware/validators.middleware");
 
-// Import Controllers
 const {
   getAllReviews,
   getReviewById,
@@ -21,38 +20,14 @@ const {
   updateReview
 } = require("../controllers/review.controllers");
 
-// Init Router
 const router = express.Router();
 
 router.use(validateSession);
 
-// Define the Endpoints
-
 router
   .route("/")
   .get(getAllReviews)
-  .post(
-    [
-      body("title")
-        .isString()
-        .withMessage("Title must be a string")
-        .notEmpty()
-        .withMessage("Must provide a valid title"),
-      body("comments")
-        .isString()
-        .withMessage("Comments must be a string")
-        .notEmpty()
-        .withMessage("Must provide a valid comments"),
-      body("rating")
-        .isNumeric()
-        .withMessage("Rating must be a number")
-        .custom((value) => value > 0 && value <= 5)
-        .withMessage("Rating must be between 1 to 5")
-        .notEmpty()
-        .withMessage("Must provide a valid rating")
-    ],
-    createNewReview
-  );
+  .post(createReviewsValidator, validationResult, createNewReview);
 
 router
   .use("/:id", reviewExits)
