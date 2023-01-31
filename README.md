@@ -8,7 +8,7 @@ https://documenter.getpostman.com/view/18428706/UyrEhv3T
 
 ## Deploy
 
-https://movie-project-nicolas.herokuapp.com/
+https://movies-api-nodejs-production-ngg.up.railway.app
 
 ## Inicia el proyecto
 
@@ -52,7 +52,7 @@ https://documenter.getpostman.com/view/18428706/UyrEhv3T
 
 ## Deploy
 
-https://movie-project-nicolas.herokuapp.com/
+https://movies-api-nodejs-production-ngg.up.railway.app
 
 ## Start the project
 
