@@ -8,7 +8,7 @@ https://documenter.getpostman.com/view/18428706/UyrEhv3T
 
 ## Deploy
 
-https://movies-api-nodejs-production-ngg.up.railway.app
+https://moviesngg-api.fly.dev/
 
 ## Inicia el proyecto
 
@@ -52,7 +52,7 @@ https://documenter.getpostman.com/view/18428706/UyrEhv3T
 
 ## Deploy
 
-https://movies-api-nodejs-production-ngg.up.railway.app
+https://moviesngg-api.fly.dev/
 
 ## Start the project
 
